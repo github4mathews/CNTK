@@ -151,19 +151,20 @@ def create_and_populate_onnx_test_case_with_model_conversion(model, tmpdir, name
     os.mkdir(test_model_path)
     test_data_path = os.path.join(str(test_model_path), R'test_data_set_0')
     os.mkdir(test_data_path)
+    
+    filename = os.path.join(str(test_model_path), name + R'.onnx')
+    model.save(filename, format=C.ModelFormat.ONNX)
+    onnx_model = onnx.load(filename)
+
     if not loaded_model:
         ## leave this line for debugging when needed
         ## plot original model
         #C.logging.graph.plot(model, os.path.join(str(test_model_path), name + ".pdf"))
 
-        filename = os.path.join(str(test_model_path), name + R'.onnx')
-        model.save(filename, format=C.ModelFormat.ONNX)
-
         loaded_model = C.Function.load(filename, format=C.ModelFormat.ONNX)
-        onnx_model = onnx.load(filename)
 
         ## leave this line for debugging when needed
-        # plot loaded model
+        ## plot loaded model
         #C.logging.graph.plot(loaded_model, filename + ".pdf")
 
         if resave:
